@@ -293,4 +293,116 @@ public class SQLFetcher {
             }
 		}
 	}
+	
+	public static List<String> getWishlist(int wishID) {
+		List<String> wishedGames = new ArrayList<>();
+		ResultSet rs = null;
+		Statement stmt = null;
+		Connection conn = null;
+		
+		try {
+			// Step 2: make a connection
+			conn = DriverManager.getConnection(_url, username, password);
+
+			// Step 3: Create a statement
+			stmt = conn.createStatement();
+
+			// Step 4: Make a query
+			String statement = "SELECT GName FROM WISHLIST WHERE Wish_ID IS " + Integer.toString(wishID);
+			rs = stmt.executeQuery(statement);
+
+			// Step 5: Use ResultSetMetaData to discover the size of the returned relation
+			ResultSetMetaData metaData = rs.getMetaData();
+
+			// Step 5.1: Get the column header info for report writing
+//			int numColumns = metaData.getColumnCount();
+//			for(int i = 1; i <= numColumns; i++)
+//			{
+//			   System.out.print(String.format(" %-10s",metaData.getColumnLabel(i)));
+//			}
+//			System.out.println("");
+			 
+			// Add the game names to the list
+			while (rs.next()) {
+				String gameName = rs.getString("Gname");
+				System.out.println(gameName);
+				wishedGames.add(gameName);
+			}
+			return wishedGames;
+		}
+		catch (Throwable t) {
+			t.printStackTrace();
+			JOptionPane.showMessageDialog(null, t.getMessage());
+		}
+		finally { // ALWAYS clean up your DB resources
+			try {
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (SQLException se) {
+				se.printStackTrace();
+			}
+		}
+		
+		return new ArrayList<>();
+	}
+	
+	public static List<String> getLibrary(int libID) {
+		List<String> libGames = new ArrayList<>();
+		ResultSet rs = null;
+		Statement stmt = null;
+		Connection conn = null;
+		
+		try {
+			// Step 2: make a connection
+			conn = DriverManager.getConnection(_url, username, password);
+
+			// Step 3: Create a statement
+			stmt = conn.createStatement();
+
+			// Step 4: Make a query
+			String statement = "SELECT GName FROM USER_LIBRARY WHERE Lib_ID IS " + Integer.toString(libID);
+			rs = stmt.executeQuery(statement);
+
+			// Step 5: Use ResultSetMetaData to discover the size of the returned relation
+			ResultSetMetaData metaData = rs.getMetaData();
+
+			// Step 5.1: Get the column header info for report writing
+//			int numColumns = metaData.getColumnCount();
+//			for(int i = 1; i <= numColumns; i++)
+//			{
+//			   System.out.print(String.format(" %-10s",metaData.getColumnLabel(i)));
+//			}
+//			System.out.println("");
+			 
+			// Add the game names to the list
+			while (rs.next()) {
+				String gameName = rs.getString("Gname");
+				System.out.println(gameName);
+				libGames.add(gameName);
+			}
+			return libGames;
+		}
+		catch (Throwable t) {
+			t.printStackTrace();
+			JOptionPane.showMessageDialog(null, t.getMessage());
+		}
+		finally { // ALWAYS clean up your DB resources
+			try {
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (SQLException se) {
+				se.printStackTrace();
+			}
+		}
+		
+		return new ArrayList<>();
+	}
 }
