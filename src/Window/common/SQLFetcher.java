@@ -1,6 +1,7 @@
 package Window.common;
 
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -23,10 +25,27 @@ public class SQLFetcher {
 	private static String password;
 	private static String _url;
 
-	static { //TODO: Remove password
+	static {
 		_url = "jdbc:mysql://localhost/vude?autoReconnect=true&useSSL=false";
-		username = "root";
-		password = "theH4irownsyou!";
+		List<String> values = new ArrayList<>();
+		try {
+			Scanner scan = new Scanner(new File("login.txt"));
+			while(scan.hasNextLine()) {
+				values.add(scan.nextLine()); // your file should have two lines. 1st line is username, second line is password. Nothing else in the file.
+			}
+		}
+		catch (Throwable t) {
+			t.printStackTrace();
+			String message = "The login file couldn't be found. Please create the login file then run the program again.";
+			System.err.println(message);
+			JOptionPane.showMessageDialog(null, message);
+			System.exit(1);
+		}
+		
+		if(values.size() == 2) {
+			username = values.get(0);
+			password = values.get(1);			
+		}
 	}
 	
 	public static StringBuilder query1(JTextField textField) {
